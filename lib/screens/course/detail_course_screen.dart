@@ -53,7 +53,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     final enrolledCourseData = Provider.of<ProfileViewModel>(context);
 
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(250),

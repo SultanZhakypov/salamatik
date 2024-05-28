@@ -43,7 +43,7 @@ class Repository {
 
       return result;
     } catch (e) {
-      log('data-unique: e: $e ');
+      log('data-unique: error e: $e ');
     }
 
     return [];
@@ -81,7 +81,6 @@ class CoursesInteractor {
     tests = res[index].tests ?? [];
     selectedTests =
         List.generate(tests[pagee].variants?.length ?? 0, (index) => null);
-
   }
 
   Future<void> selectTest(int index, {int? code}) async {
