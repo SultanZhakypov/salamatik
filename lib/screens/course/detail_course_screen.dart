@@ -15,7 +15,13 @@ import '../../model/wishlist/wishlist_viewmodel.dart';
 class DetailCourseScreen extends StatefulWidget {
   final Courses? courseId;
   final int index;
-  const DetailCourseScreen({super.key, this.courseId, required this.index});
+  final bool isWhishList;
+  const DetailCourseScreen({
+    super.key,
+    this.courseId,
+    required this.index,
+    this.isWhishList = false,
+  });
 
   @override
   State<DetailCourseScreen> createState() => _DetailCourseScreenState();
@@ -160,22 +166,23 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             actions: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: CircleAvatar(
-                  backgroundColor: const Color.fromARGB(62, 158, 158, 158),
-                  child: IconButton(
-                    onPressed: () {
-                      // wishlist.wishlishedCourse?.add(widget.courseId!);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Added to Wishlist!')),
-                      );
-                    },
-                    icon:
-                        const Icon(Icons.bookmark_outline, color: Colors.white),
+              if (!widget.isWhishList)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: CircleAvatar(
+                    backgroundColor: const Color.fromARGB(62, 158, 158, 158),
+                    child: IconButton(
+                      onPressed: () {
+                        // wishlist.wishlishedCourse?.add(widget.courseId!);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Added to Wishlist!')),
+                        );
+                      },
+                      icon: const Icon(Icons.bookmark_outline,
+                          color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
             ],
             bottom: const TabBar(
               indicatorSize: TabBarIndicatorSize.label,

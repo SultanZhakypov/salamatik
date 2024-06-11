@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:dimplom/screens/course/course_screen.dart';
+import 'package:dimplom/screens/course/model_hive/courses_local_model.dart';
+import 'package:dimplom/screens/homescreen/data/cources_model.dart';
 import 'package:flutter/material.dart';
 
 class CourseCard extends StatefulWidget {
@@ -10,6 +12,8 @@ class CourseCard extends StatefulWidget {
   String totalVideo;
   String totalTime;
   double? rating;
+  bool isWhishList;
+  Courses? courseIdModel;
 
   CourseCard(
       {super.key,
@@ -17,6 +21,8 @@ class CourseCard extends StatefulWidget {
       required this.courseName,
       this.mentorName,
       this.rating,
+      this.isWhishList = false,
+      this.courseIdModel,
       required this.totalTime,
       required this.totalVideo});
 
@@ -26,6 +32,7 @@ class CourseCard extends StatefulWidget {
 
 class _CourseCardState extends State<CourseCard> {
   final isOpened = ValueNotifier<bool>(false);
+
   @override
   Widget build(BuildContext context) {
     bool isAvailable = true;
@@ -52,47 +59,37 @@ class _CourseCardState extends State<CourseCard> {
             return Stack(
               alignment: AlignmentDirectional.centerEnd,
               children: [
-                Positioned(
-                  right: 15,
-                  child: Transform.rotate(
-                    angle: 4.70,
-                    child: const ShimmerArrows(),
+                if (!widget.isWhishList)
+                  Positioned(
+                    right: 15,
+                    child: Transform.rotate(
+                      angle: 4.70,
+                      child: const ShimmerArrows(),
+                    ),
                   ),
-                ),
-                AnimatedContainer(
-                  width: isOpened.value ? 60 : 0,
-                  duration: const Duration(milliseconds: 300),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        offset: const Offset(1.1, 1.1),
-                        blurRadius: 15.0,
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AnimatedItemForDop(
+                if (!widget.isWhishList)
+                  AnimatedContainer(
+                    width: isOpened.value ? 60 : 0,
+                    duration: const Duration(milliseconds: 300),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          offset: const Offset(1.1, 1.1),
+                          blurRadius: 15.0,
+                        ),
+                      ],
+                    ),
+                    child: Opacity(
+                      opacity: isOpened.value ? 1 : 0,
+                      child: AnimatedItemForDop(
                         icon: Icons.bookmark_rounded,
                         text: 'Wishlist',
                         isOpened: isOpened,
+                        courseIdModel: widget.courseIdModel,
                       ),
-                      // AnimatedItemForDop(
-                      //   icon: Icons.access_alarm,
-                      //   text: 'Alarm',
-                      //   isOpened: isOpened,
-                      // ),
-                      // AnimatedItemForDop(
-                      //   icon: Icons.access_alarm,
-                      //   text: 'Alarm',
-                      //   isOpened: isOpened,
-                      // )
-                    ],
+                    ),
                   ),
-                ),
                 Row(
                   children: [
                     Expanded(
@@ -233,54 +230,82 @@ class GreenChipWidget extends StatelessWidget {
   }
 }
 
-class AnimatedItemForDop extends StatelessWidget {
+class AnimatedItemForDop extends StatefulWidget {
   const AnimatedItemForDop({
     super.key,
     required this.icon,
     required this.text,
     required this.isOpened,
+    required this.courseIdModel,
   });
 
   final ValueNotifier<bool> isOpened;
   final IconData icon;
   final String text;
+  final Courses? courseIdModel;
 
   @override
+  State<AnimatedItemForDop> createState() => _AnimatedItemForDopState();
+}
+
+class _AnimatedItemForDopState extends State<AnimatedItemForDop> {
+  final nfcCardKeysHelper = NfcCardKeysHelper();
+  @override
   Widget build(BuildContext context) {
-    return Flexible(
-      fit: FlexFit.tight,
-      child: GestureDetector(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Added to Wishlist!')),
-          );
-        },
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(5),
-              bottomRight: Radius.circular(5),
+    return GestureDetector(
+      onTap: () async {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Added to Wishlist!')),
+        );
+        final model = CoursesLocalModel(
+          image: widget.courseIdModel?.image,
+          title: widget.courseIdModel?.title,
+          video: widget.courseIdModel?.video,
+          description: widget.courseIdModel?.description,
+          tests: widget.courseIdModel?.tests
+              ?.map(
+                (model) => TestsHive(
+                  available: model.available,
+                  question: model.question,
+                  variants: model.variants
+                      ?.map(
+                        (model) => VariantsHive(
+                          code: model.code,
+                          variant: model.variant,
+                        ),
+                      )
+                      .toList(),
+                ),
+              )
+              .toList(),
+        );
+        await nfcCardKeysHelper.setCardKeyInfo([model]);
+      },
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(5),
+            bottomRight: Radius.circular(5),
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              offset: const Offset(1.1, 1.1),
+              blurRadius: 15.0,
             ),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                offset: const Offset(1.1, 1.1),
-                blurRadius: 15.0,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon),
-              const SizedBox(height: 2.5),
-              SizedBox(
-                height: 16,
-                child: Text(text),
-              ),
-            ],
-          ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(widget.icon),
+            const SizedBox(height: 2.5),
+            SizedBox(
+              height: 16,
+              child: Text(widget.text),
+            ),
+          ],
         ),
       ),
     );

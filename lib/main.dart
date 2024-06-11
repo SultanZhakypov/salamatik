@@ -1,6 +1,8 @@
 import 'package:dimplom/api/dio_generator.dart';
 import 'package:dimplom/firebase_options.dart';
 import 'package:dimplom/model/course/course_viewmodel.dart';
+import 'package:dimplom/screens/course/model_hive/courses_local_model.dart';
+import 'package:dimplom/screens/course/model_hive/hive_extension.dart';
 import 'package:dimplom/screens/homescreen/data/repository.dart';
 import 'package:dimplom/screens/homescreen/presentation/cubit/home_cubit.dart';
 import 'package:dimplom/screens/screen.dart';
@@ -8,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import 'model/auth/auth_viewmodel.dart';
@@ -16,6 +19,17 @@ import 'model/wishlist/wishlist_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  await Hive.initFlutter();
+   if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(CoursesLocalModelAdapter());
+    }
+   if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(TestsHiveAdapter());
+    }
+   if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapter(VariantsHiveAdapter());
+    }
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -56,7 +70,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

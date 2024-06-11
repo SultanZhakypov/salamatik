@@ -199,12 +199,14 @@ class _CourseScreenState extends State<CourseScreen> {
                                 );
                               },
                               child: CourseCard(
+                                courseIdModel: state.courses[index],
                                 courseImage: state.courses[index].image ?? '',
                                 courseName: state.courses[index].title ?? '',
                                 rating: mockData[index].totalRating ?? 0,
                                 totalTime: mockData[index].totalTime ?? '',
                                 totalVideo:
                                     mockData[index].totalVideo.toString(),
+                                    
                               ),
                             );
                           },
