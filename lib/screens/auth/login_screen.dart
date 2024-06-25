@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dimplom/components/logo.dart';
 import 'package:dimplom/model/profile/profile_viewmodel.dart';
 import 'package:dimplom/screens/homescreen/main_page.dart';
@@ -45,6 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+
+  String pass = 'salamat@gmail.com';
+  // String pass = '2002';
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         }
                       },
-                      child: const Text('LOGIN'),
+                      child: Text('Вход'.toUpperCase()),
                     ),
                   ),
                 ),
@@ -158,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     final Uri emailLaunchUri = Uri(
                       scheme: 'mailto',
-                      path: 'online@edutiv.com',
+                      path: 'Salamat@gmail.com.com',
                       query: encodeQueryParameters(
                           <String, String>{'subject': 'Request an Account'}),
                     );
@@ -188,22 +193,22 @@ class buildLoginTextHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 32),
-      height: 230,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/login_hero.png',
+            'assets/icon_login.jpg',
             width: 200,
             height: 160,
           ),
           const Text(
-            'Welcome Back',
+            'IT-инновации\nот нуля до героя',
             style: TextStyle(fontSize: 28),
+            textAlign: TextAlign.center,
           ),
           const Text(
-            'Please login with your account to continue',
+            'Мир цифровых технологий',
             style: TextStyle(fontSize: 13, color: Colors.grey),
           ),
         ],
@@ -228,8 +233,11 @@ class buildEmailField extends StatelessWidget {
       },
       controller: emailController,
       validator: (val) {
+        log('data-unique: val: $val ');
         if (val!.isEmpty) {
           return 'Обязательное поле';
+        } else if (!val.contains('@gmail.com') == true) {
+          return 'Неверная почта';
         } else {
           return null;
         }

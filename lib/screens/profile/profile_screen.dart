@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../model/profile/profile_viewmodel.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -23,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     var user = Provider.of<ProfileViewModel>(context);
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 63, 112, 116),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).primaryColor,
@@ -108,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       final Uri emailLaunchUri = Uri(
                         scheme: 'mailto',
-                        path: 'online@edutiv.com',
+                        path: 'Salamat@gmail.com',
                         query: encodeQueryParameters(<String, String>{
                           'subject': 'Tell us to improve edutiv services!'
                         }),
@@ -154,8 +155,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +189,7 @@ class ProfileHeader extends StatelessWidget {
                 fit: FlexFit.loose,
                 flex: 1,
                 child: Text(
-                  user.userData.firstname! + ' ' + user.userData.lastname!,
+                  '${user.userData.firstname!} ${user.userData.lastname!}',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 24,

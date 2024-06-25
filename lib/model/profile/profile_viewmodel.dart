@@ -16,7 +16,7 @@ class ProfileViewModel extends ChangeNotifier {
   bool isFaqLoading = true;
   bool isLoadingData = true;
 
-  List<EnrolledCourseModel> _enrolledCourse = [];
+  final List<EnrolledCourseModel> _enrolledCourse = [];
   List<EnrolledCourseModel> get enrolledCourse => _enrolledCourse;
 
   List<EnrolledCourseModel> _finishedCourse = [];
@@ -69,10 +69,8 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future<List<EnrolledCourseModel>> getEnrolledCourse() async {
-    final enrolled = await UserAPI().fetchEnrolledCourse();
-    _enrolledCourse = enrolled;
-    notifyListeners();
-    return enrolled;
+    // final enrolled = await UserAPI().fetchEnrolledCourse();
+    return [];
   }
 
   Future<RequestModel> requestForm(

@@ -10,9 +10,11 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: Colors.transparent,
       width: MediaQuery.of(context).size.width,
       child: Card(
+        color: const Color.fromARGB(255, 93, 163, 189),
         elevation: 12,
         shape: BeveledRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

@@ -33,12 +33,12 @@ final class HomeSuccess extends HomeState {
 
 final class CoursesSuccess extends HomeState {
   final List<Courses> courses;
-
-  CoursesSuccess({required this.courses});
+  final Key key;
+  CoursesSuccess({required this.courses, required this.key});
 
   @override
   // TODO: implement props
-  List<Object?> get props => [courses];
+  List<Object?> get props => [courses, key];
 }
 
 final class TestsSuccess extends HomeState {
@@ -49,7 +49,7 @@ final class TestsSuccess extends HomeState {
   final String? correctAnswers;
 
   TestsSuccess({
-     this.correctAnswers,
+    this.correctAnswers,
     required this.tests,
     required this.index,
     required this.selectedTests,

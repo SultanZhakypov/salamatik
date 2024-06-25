@@ -38,19 +38,50 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 54, 119, 204),
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
+        selectedLabelStyle: const TextStyle(
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          color: Colors.white,
+        ),
         onTap: (index) => setState(() => currentIndex = index),
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded), label: 'Home'),
+            icon: Icon(Icons.home_rounded),
+            label: 'Home',
+            activeIcon: Icon(
+              Icons.home_rounded,
+              color: Colors.white,
+            ),
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_rounded), label: 'Course'),
+            icon: Icon(Icons.menu_book_rounded),
+            activeIcon: Icon(
+              Icons.menu_book_rounded,
+              color: Colors.white,
+            ),
+            label: 'Course',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_rounded), label: 'Wishlist'),
+            icon: Icon(Icons.bookmark_rounded),
+            activeIcon: Icon(
+              Icons.bookmark_rounded,
+              color: Colors.white,
+            ),
+            label: 'Wishlist',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_rounded), label: 'Profile'),
+            icon: Icon(Icons.account_circle_rounded),
+            activeIcon: Icon(
+              Icons.account_circle_rounded,
+              color: Colors.white,
+            ),
+            label: 'Profile',
+          ),
         ],
       ),
     );

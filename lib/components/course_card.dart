@@ -50,7 +50,8 @@ class _CourseCardState extends State<CourseCard> {
         height: 116,
         margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
+          color: const Color.fromARGB(255, 70, 123, 222),
+          border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(5),
         ),
         child: ValueListenableBuilder(

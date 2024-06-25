@@ -40,6 +40,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 63, 112, 116),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -50,136 +51,146 @@ class _WishlistScreenState extends State<WishlistScreen> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: whishList.length,
-        itemBuilder: (context, index) {
-          final model = whishList[index];
-          final coursesId = Courses(
-            image: model.image,
-            title: model.title,
-            video: model.video,
-            description: model.description,
-            tests: model.tests
-                ?.map(
-                  (e) => Tests(
-                    available: e.available,
-                    question: e.question,
-                    variants: e.variants
-                        ?.map(
-                          (e) => Variants(
-                            code: e.code,
-                            variant: e.variant,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                )
-                .toList(),
-          );
-
-          List<CourseModel> mockData = List.generate(
-            whishList.length,
-            (index) => CourseModel(
-              id: 1,
-              courseName: 'sdk',
-              courseImage: 'sdk',
-              category: CategoryModel(id: 2),
-              description: 'sdk',
-              totalVideo: 1,
-              totalTime: 'sdk',
-              totalRating: 1.3,
-              sections: [
-                Section(id: 4),
-                Section(id: 5),
-              ],
-              reviews: [
-                Review(id: 52),
-                Review(id: 51),
-              ],
-              tools: [
-                Tools(id: 4),
-              ],
-            ),
-          );
-          return Dismissible(
-            key: UniqueKey(),
-            onDismissed: (direction) async {
-              await nfcCardKeysHelper.deleteById(index);
-              // whishList.removeAt(index);
-              getList();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${whishList[index].title} Removed'),
+      body: whishList.isEmpty
+          ? Center(
+              child: Text(
+                'Пустой лист'.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 23,
                 ),
-              );
-              setState(() {});
-            },
-            child: GestureDetector(
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailCourseScreen(
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: whishList.length,
+              itemBuilder: (context, index) {
+                final model = whishList[index];
+                final coursesId = Courses(
+                  image: model.image,
+                  title: model.title,
+                  video: model.video,
+                  description: model.description,
+                  tests: model.tests
+                      ?.map(
+                        (e) => Tests(
+                          available: e.available,
+                          question: e.question,
+                          variants: e.variants
+                              ?.map(
+                                (e) => Variants(
+                                  code: e.code,
+                                  variant: e.variant,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      )
+                      .toList(),
+                );
+
+                List<CourseModel> mockData = List.generate(
+                  whishList.length,
+                  (index) => CourseModel(
+                    id: 1,
+                    courseName: 'sdk',
+                    courseImage: 'sdk',
+                    category: CategoryModel(id: 2),
+                    description: 'sdk',
+                    totalVideo: 1,
+                    totalTime: 'sdk',
+                    totalRating: 1.3,
+                    sections: [
+                      Section(id: 4),
+                      Section(id: 5),
+                    ],
+                    reviews: [
+                      Review(id: 52),
+                      Review(id: 51),
+                    ],
+                    tools: [
+                      Tools(id: 4),
+                    ],
+                  ),
+                );
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction) async {
+                    await nfcCardKeysHelper.deleteById(index);
+                    // whishList.removeAt(index);
+                    getList();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${whishList[index].title} Removed'),
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  child: GestureDetector(
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailCourseScreen(
+                            isWhishList: true,
+                            courseId: coursesId,
+                            index: index,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CourseCard(
                       isWhishList: true,
-                      courseId: coursesId,
-                      index: index,
+                      courseIdModel: coursesId,
+                      courseImage: coursesId.image ?? '',
+                      courseName: coursesId.title ?? '',
+                      rating: mockData[index].totalRating ?? 0,
+                      totalTime: mockData[index].totalTime ?? '',
+                      totalVideo: mockData[index].totalVideo.toString(),
                     ),
                   ),
                 );
-              },
-              child: CourseCard(
-                isWhishList: true,
-                courseIdModel: coursesId,
-                courseImage: coursesId.image ?? '',
-                courseName: coursesId.title ?? '',
-                rating: mockData[index].totalRating ?? 0,
-                totalTime: mockData[index].totalTime ?? '',
-                totalVideo: mockData[index].totalVideo.toString(),
-              ),
-            ),
-          );
 
-          // Dismissible(
-          //   key: UniqueKey(),
-          //   onDismissed: (direction) {
-          //     setState(() {
-          //       wishlishedCourse.wishlishedCourse?.removeAt(index);
-          //     });
-          //     ScaffoldMessenger.of(context).showSnackBar(
-          //       SnackBar(
-          //         content: Text(
-          //             '${wishlishedCourse.wishlishedCourse?[index].courseName} Removed'),
-          //       ),
-          //     );
-          //   },
-          //   child: GestureDetector(
-          //     onTap: () => Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => const DetailCourseScreen(
-          //           index: 0,
-          //           // courseId: wishlishedCourse.wishlishedCourse?[index],
-          //         ),
-          //       ),
-          //     ),
-          //     child: CourseCard(
-          //       courseImage:
-          //           wishlishedCourse.wishlishedCourse?[index].courseImage ?? '',
-          //       courseName:
-          //           wishlishedCourse.wishlishedCourse?[index].courseName ?? '',
-          //       rating:
-          //           wishlishedCourse.wishlishedCourse?[index].totalRating ?? 0,
-          //       totalTime:
-          //           wishlishedCourse.wishlishedCourse?[index].totalTime ?? '',
-          //       totalVideo: wishlishedCourse.wishlishedCourse?[index].totalVideo
-          //               .toString() ??
-          //           '',
-          //     ),
-          //   ),
-          // );
-        },
-      ),
+                // Dismissible(
+                //   key: UniqueKey(),
+                //   onDismissed: (direction) {
+                //     setState(() {
+                //       wishlishedCourse.wishlishedCourse?.removeAt(index);
+                //     });
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(
+                //         content: Text(
+                //             '${wishlishedCourse.wishlishedCourse?[index].courseName} Removed'),
+                //       ),
+                //     );
+                //   },
+                //   child: GestureDetector(
+                //     onTap: () => Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => const DetailCourseScreen(
+                //           index: 0,
+                //           // courseId: wishlishedCourse.wishlishedCourse?[index],
+                //         ),
+                //       ),
+                //     ),
+                //     child: CourseCard(
+                //       courseImage:
+                //           wishlishedCourse.wishlishedCourse?[index].courseImage ?? '',
+                //       courseName:
+                //           wishlishedCourse.wishlishedCourse?[index].courseName ?? '',
+                //       rating:
+                //           wishlishedCourse.wishlishedCourse?[index].totalRating ?? 0,
+                //       totalTime:
+                //           wishlishedCourse.wishlishedCourse?[index].totalTime ?? '',
+                //       totalVideo: wishlishedCourse.wishlishedCourse?[index].totalVideo
+                //               .toString() ??
+                //           '',
+                //     ),
+                //   ),
+                // );
+              },
+            ),
     );
   }
 }

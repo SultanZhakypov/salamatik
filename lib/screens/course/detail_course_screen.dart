@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dimplom/components/disabled_enroll_bottom_bar.dart';
 import 'package:dimplom/model/profile/profile_viewmodel.dart';
 import 'package:dimplom/screens/homescreen/data/cources_model.dart';
@@ -10,7 +12,6 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../components/enroll_bottom_bar.dart';
 import '../../components/review_card.dart';
 import '../../model/course/course_viewmodel.dart';
-import '../../model/wishlist/wishlist_viewmodel.dart';
 
 class DetailCourseScreen extends StatefulWidget {
   final Courses? courseId;
@@ -40,6 +41,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     super.initState();
   }
 
+//description
   checkIsEnrolled() async {
     final enrolled = Provider.of<ProfileViewModel>(context, listen: false);
 
@@ -51,12 +53,12 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     // }
   }
 
+  //
+
   @override
   Widget build(BuildContext context) {
     checkIsEnrolled();
-    // final detail = Provider.of<CourseViewModel>(context);
-    final wishlist = Provider.of<WishlistViewModel>(context);
-    final enrolledCourseData = Provider.of<ProfileViewModel>(context);
+    log('data-unique: widget.courseId: ${widget.courseId} ');
 
     return DefaultTabController(
       length: 3,
@@ -227,11 +229,11 @@ class AboutTabSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final detail = Provider.of<CourseViewModel>(context);
-    return Padding(
+    log('data-unique: data?.description: ${data?.description} ');
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Text(
-        data?.description ?? '',
+        data?.description ?? 'Empty',
         // detail.courseData.description ?? '',
       ),
     );

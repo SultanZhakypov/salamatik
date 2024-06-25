@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 39, 129, 141),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Logo(),
@@ -37,21 +38,27 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const CarouselHero(),
               const SizedBox(height: 8),
-              const Text(
-                'Explore Categories',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Explore Categories',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
               ),
-              const Row(
-                children: [
-                  Text(
-                    'Lesson',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    'Category',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      'Lesson',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      'Category',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
               ),
               BlocConsumer<HomeCubit, HomeState>(
                 listener: (context, state) {

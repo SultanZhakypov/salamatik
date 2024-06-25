@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 // ignore_for_file: constant_identifier_names
 
 import 'package:bloc/bloc.dart';
@@ -14,6 +16,9 @@ class HomeCubit extends Cubit<HomeState> {
   final Repository _repo;
   late final _interactor = CoursesInteractor(repo: _repo);
 
+  List<Courses> allCourse = [];
+  List<Courses> filterList = [];
+
   Future<void> getDataCubit() async {
     try {
       emit(HomeLoading());
@@ -28,7 +33,11 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       emit(HomeLoading());
       final result = await _repo.getCources();
-      emit(CoursesSuccess(courses: result));
+      allCourse.addAll(result);
+      emit(CoursesSuccess(
+        courses: result,
+        key: UniqueKey(),
+      ));
     } catch (e) {
       emit(HomeError(e));
     }
@@ -64,6 +73,30 @@ class HomeCubit extends Cubit<HomeState> {
           testStatus: TestStatus.SELECTED,
         ),
       );
+    } catch (e) {
+      emit(HomeError(e));
+    }
+  }
+
+  Future<void> search(String query) async {
+    try {
+      if (query.trim().isNotEmpty) {
+        filterList = allCourse.where(
+          (e) {
+            final listsTitles = e.title!.toLowerCase().trim();
+            final input = query.toLowerCase().trim();
+            return listsTitles.contains(input);
+          },
+        ).toList();
+      } else {
+        filterList = allCourse;
+      }
+
+      emit(CoursesSuccess(
+        courses: filterList,
+        key: UniqueKey(),
+      ));
+      log('data-unique: filterList: $filterList ');
     } catch (e) {
       emit(HomeError(e));
     }
